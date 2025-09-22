@@ -1,0 +1,259 @@
+"Package","Invalid","Author"
+"ABSSeq","wyang@zoologie.uni-kiel.de","Wentao Yang"
+"aCGH","dimitrov@stat.berkeley.edu","Jane Fridlyand <jfridlyand@cc.ucsf.edu>, Peter Dimitrov
+<dimitrov@stat.Berkeley.EDU>"
+"affy","rafa@ds.harvard.edu","Rafael A. Irizarry <rafa@ds.harvard.edu>, Laurent Gautier
+<lgautier@gmail.com>, Benjamin Milo Bolstad
+<bmb@bmbolstad.com>, and Crispin Miller
+<cmiller@picr.man.ac.uk> with contributions from Magnus Astrand
+<Magnus.Astrand@astrazeneca.com>, Leslie M. Cope
+<cope@mts.jhu.edu>, Robert Gentleman, Jeff Gentry, Conrad
+Halling <challing@agilixcorp.com>, Wolfgang Huber, James
+MacDonald <jmacdon@u.washington.edu>, Benjamin I. P.
+Rubinstein, Christopher Workman <workman@cbs.dtu.dk>, John
+Zhang"
+"affycomp;AmpAffyExample;SpikeIn;SpikeInSubset","rafa@jhu.edu","Rafael A. Irizarry <rafa@jhu.edu> and Zhijin Wu
+<zwu@stat.brown.edu> with contributions from Simon Cawley
+<simon_cawley@affymetrix.com>;Rafael A. Irizarry;Rafael Irizarry <rafa@jhu.edu>;Rafael Irizarry <rafa@jhu.edu> and Zhijin Wu"
+"AgiMicroRna","plopez@cnic.es","Pedro Lopez-Romero <plopez@cnic.es>"
+"AMOUNTAIN;MODA","dxl466@cs.bham.ac.uk","Dong Li, Shan He, Zhisong Pan and Guyu Hu;Dong Li, James B. Brown, Luisa Orsini, Zhisong Pan, Guyu Hu and
+Shan He"
+"anota2seq","julie.lorent@ki.se","Christian Oertlin <christian.oertlin@ki.se>, Julie Lorent
+<julie.lorent@ki.se>, Ola Larsson <ola.larsson@ki.se>"
+"ASGSCA","hela.romdhani@mcgill.ca","Hela Romdhani, Stepan Grinek , Heungsun Hwang and Aurelie
+Labbe."
+"ASpli","emancini@leloir.org.ar","Estefania Mancini, Andres Rabinovich, Javier Iserte, Marcelo
+Yanovsky and Ariel Chernomoretz"
+"BADER","a.neudecker@arcor.de","Andreas Neudecker, Matthias Katzfuss"
+"BaseSpaceR","joconnell@illumina.com","Adrian Alexa"
+"Basic4Cseq;Scale4C","carolin.walter@uni-muenster.de","Carolin Walter"
+"BasicSTARRseq","annika.buerger@ukmuenster.de","Annika Buerger"
+"BCRANK","adam.ameur@genpat.uu.se","Adam Ameur <Adam.Ameur@genpat.uu.se>"
+"BEAT","akman@mpipz.mpg.de","Kemal Akman <akman@mpipz.mpg.de>"
+"BGmix","a.m.lewin@imperial.ac.uk","Alex Lewin, Natalia Bochkina"
+"BiGGR","hannes.hettling@naturalis.nl","Anand K. Gavai, Hannes Hettling"
+"biobtreeR","tgur@ebi.ac.uk","Tamer Gur"
+"biomformat","mcmurdie@stanford.edu","Paul J. McMurdie <mcmurdie@stanford.edu> and Joseph N Paulson
+<jpaulson@jimmy.harvard.edu>"
+"BioTIP","zhezhen@uchicago.edu","Zhezhen Wang, Andrew Goldstein, Yuxi Sun, Biniam Feleke, Qier
+An, Antonio Feliciano, Xinan Yang"
+"branchpointer;GeneStructureTools","b.signal@garvan.org.au","Beth Signal"
+"BUS;NTW","liuyuanhua@picb.ac.cn","Yin Jin, Hesen Peng, Lei Wang, Raffaele Fronza, Yuanhua Liu and
+Christine Nardini;Wei Xiao, Yin Jin, Darong Lai, Xinyi Yang, Yuanhua Liu,
+Christine Nardini"
+"CausalR","steven.j.barrett@gsk.com","Glyn Bradley, Steven Barrett, Chirag Mistry, Mark Pipe, David
+Wille, David Riley, Bhushan Bonde, Peter Woollard"
+"ccfindR","jwoo@umn.edu","Jun Woo [aut, cre], Jinhua Wang [aut]"
+"celaref;celarefData","sarah.williams1@monash.edu","Sarah Williams [aut, cre]"
+"cellity","ti243@cam.ac.uk","Tomislav Illicic, Davis McCarthy"
+"CGHregions","info@vossewebdevelopment.nl","Sjoerd Vosse & Mark van de Wiel"
+"ChIPComp;traseR","li.chen@emory.edu","Hao Wu, Li Chen, Zhaohui S.Qin, Chi Wang;Li Chen, Zhaohui S.Qin"
+"chromDraw","jan.janecka@ceitec.muni.cz","Jan Janecka, Ing., Mgr. CEITEC Masaryk University"
+"clippda","s.o.nyangoma@bham.ac.uk","Stephen Nyangoma"
+"clustComp","aurora@ebi.ac.uk","Aurora Torrente and Alvis Brazma."
+"CNORdt","aidan.macnamara@ebi.ac.uk","A. MacNamara"
+"CNORfuzzy","cokelaer@ebi.ac.uk","M. Morris, T. Cokelaer"
+"convert;marray;beta7","jean@biostat.ucsf.edu","Gordon Smyth <smyth@wehi.edu.au>, James Wettenhall
+<wettenhall@wehi.edu.au>, Yee Hwa (Jean Yang)
+<jean@biostat.ucsf.edu>, Martin Morgan
+<Martin.Morgan@RoswellPark.org>;Yee Hwa (Jean) Yang <jeany@maths.usyd.edu.au> with
+contributions from Agnes Paquet and Sandrine Dudoit.;Jean Yang <jean@biostat.ucsf.edu>"
+"CORREP","doz@stowers-institute.org","Dongxiao Zhu and Youjuan Li"
+"cpvSNP","mchughc@uw.edu","Caitlin McHugh, Jessica Larson, and Jason Hackney"
+"CRImage","failmezger@mpipz.mpg.de","Henrik Failmezger <failmezger@mpipz.mpg.de>, Yinyin Yuan
+<Yinyin.Yuan@cancer.org.uk>, Oscar Rueda
+<oscar.rueda@cancer.org.uk>, Florian Markowetz
+<Florian.Markowetz@cancer.org.uk>"
+"CRImage","yinyin.yuan@cancer.org.uk","Henrik Failmezger <failmezger@mpipz.mpg.de>, Yinyin Yuan
+<Yinyin.Yuan@cancer.org.uk>, Oscar Rueda
+<oscar.rueda@cancer.org.uk>, Florian Markowetz
+<Florian.Markowetz@cancer.org.uk>"
+"CytoDx;MetaCyto;RImmPort","zicheng.hu@ucsf.edu","Zicheng Hu;Zicheng Hu, Chethan Jujjavarapu, Sanchita Bhattacharya, Atul J.
+Butte;Ravi Shankar <rshankar@stanford.edu>"
+"daMA","jlandgr1@gwdg.de","Jobst Landgrebe <jlandgr1@gwdg.de> and Frank Bretz
+<bretz@bioinf.uni-hannover.de>"
+"ddPCRclust","bbrink@cebitec.uni-bielefeld.de","Benedikt G. Brink [aut, cre], Justin Meskas [ctb], Ryan R.
+Brinkman [ctb]"
+"DeepBlueR","felipe.albrecht@mpi-inf.mpg.de","Felipe Albrecht, Markus List"
+"Dino","brownj@ds.dfci.harvard.edu","Jared Brown [aut, cre]
+(<https://orcid.org/0000-0002-9151-4386>), Christina
+Kendziorski [ctb]"
+"DominoEffect;SWATH2stats","blattmann@imsb.biol.ethz.ch","Marija Buljan and Peter Blattmann;Peter Blattmann [aut, cre] Moritz Heusel [aut] Ruedi Aebersold
+[aut]"
+"DrugVsDisease;cMap2data;DrugVsDiseasedata;DvDdata","saezrodriguez@ebi.ac.uk","C. Pacini"
+"DTA","schwalb@lmb.uni-muenchen.de","Bjoern Schwalb, Benedikt Zacher, Sebastian Duemcke, Achim
+Tresch"
+"EBcoexpress","jadawson@wisc.edu","John A. Dawson"
+"ELMER;TCGAWorkflowData","tiagochst@usp.br","Tiago Chedraoui Silva [aut, cre], Lijing Yao [aut], Simon
+Coetzee [aut], Nicole Gull [ctb], Hui Shen [ctb], Peter Laird
+[ctb], Peggy Farnham [aut], Dechen Li [ctb], Benjamin Berman
+[aut];Tiago Chedraoui Silva <tiagochst@usp.br>"
+"EMDomics","contact@sadhikamalladi.com","Sadhika Malladi [aut, cre], Daniel Schmolze [aut, cre], Andrew
+Beck [aut], Sheida Nabavi [aut]"
+"enrichTF","wzwz@stanford.edu","Zheng Wei, Zhana Duren, Shining Ma"
+"FEAST;iPath;POWSC","kenong.su@emory.edu","Kenong Su [aut, cre], Hao Wu [aut];Kenong Su [aut, cre], Zhaohui Qin [aut]"
+"gaggle","cbare@systemsbiology.org","Paul Shannon <pshannon@systemsbiology.org>"
+"garfield","vi1@sanger.ac.uk","Sandro Morganella <sm22@sanger.ac.uk>"
+"GCSscore","harrisgm@vcu.edu","Guy M. Harris & Shahroze Abbas & Michael F. Miles"
+"genArise","info-genarise@ifc.unam.mx","Ana Patricia Gomez Mayen <pgomez@ifc.unam.mx>,\\ Gustavo Corral
+Guille <gcorral@ifc.unam.mx>, \\ Lina Riego Ruiz
+<lriego@ifc.unam.mx>,\\ Gerardo Coello Coutino
+<gcoello@ifc.unam.mx>"
+"genbankr","becker.gabriel@gene.com","Gabriel Becker [aut, cre], Michael Lawrence [aut]"
+"geneAttribution","wustera@gene.com","Arthur Wuster"
+"geneRecommender","ghather@stat.berkeley.edu","Gregory J. Hather <ghather@stat.berkeley.edu>, with
+contributions from Art B. Owen <art@stat.stanford.edu> and
+Terence P. Speed <terry@stat.berkeley.edu>"
+"GeneRegionScan","lasfol@cbs.dtu.dk","Lasse Folkersen, Diego Diez"
+"gespeR;netprioR","fabian.schmich@bsse.ethz.ch","Fabian Schmich"
+"GIGSEA;GIGSEAdata","shijia.zhu@mssm.edu","Shijia Zhu"
+"GISPA;SISPA","bhakti.dwivedi@emory.edu","Bhakti Dwivedi and Jeanne Kowalski"
+"Harshlight","mpellegri@berkeley.edu","Mayte Suarez-Farinas, Maurizio Pellegrino, Knut M. Wittkowski,
+Marcelo O. Magnasco"
+"HEM","hcho@virginia.edu","HyungJun Cho <hcho@virginia.edu> and Jae K. Lee
+<jaeklee@virginia.edu>"
+"multiHiCcompare;HMP2Data","stansfieldjc@vcu.edu","John Stansfield <stansfieldjc@vcu.edu>, Mikhail Dozmorov
+<mikhail.dozmorov@vcuhealth.org>;John Stansfield <stansfieldjc@vcu.edu>, Ekaterina Smirnova
+<ekaterina.smirnova@vcuhealth.org>, Ni Zhao <nzhao10@jhu.edu>,
+Jennifer Fettweis <jennifer.fettweis@vcuhealth.org>, Levi
+Waldron <levi.waldron@sph.cuny.edu>, Mikhail Dozmorov
+<mikhail.dozmorov@vcuhealth.org>"
+"hierGWAS","buzdugan@stat.math.ethz.ch","Laura Buzdugan"
+"iBMQ;pepStat","gimholte@uw.edu","Marie-Pier Scott-Boyer and Greg Imholte;Raphael Gottardo, Gregory C Imholte, Renan Sauteraud, Mike
+Jiang"
+"idiogram","karl.dykema@vai.org","Karl J. Dykema <karl.dykema@vai.org>"
+"IMAS;IVAS","hangost@ssu.ac.kr","Seonggyun Han, Younghee Lee;Seonggyun Han, Sangsoo Kim"
+"IMPCdata","jmason@ebi.ac.uk","Natalja Kurbatova, Jeremy Mason"
+"KCsmart","j.d.ronde@nki.nl","Jorma de Ronde, Christiaan Klijn, Arno Velds"
+"lapmix","yann.ruffieux@epfl.ch","Yann Ruffieux, contributions from Debjani Bhowmick, Anthony C.
+Davison, and Darlene R. Goldstein"
+"lmdme","cfresno@bdmg.com.ar","Cristobal Fresno and Elmer A. Fernandez"
+"loci2path","tianlei.xu@emory.edu","Tianlei Xu"
+"logitT","tguennel@vcu.edu","Tobias Guennel <tguennel@vcu.edu>"
+"LOLA","nathan@code.databio.org","Nathan Sheffield <http://www.databio.org> [aut, cre], Christoph
+Bock [ctb]"
+"LPEadj","carl.murie@mcgill.ca","Carl Murie <carl.murie@mcgill.ca>, Robert Nadon
+<robert.nadon@mcgill.ca>"
+"MAGAR","mscherer@mpi-inf.mpg.de","Michael Scherer [cre, aut]
+(<https://orcid.org/0000-0001-7990-6179>)"
+"MantelCorr","steinmeb@ilya.wustl.edu","Brian Steinmeyer and William Shannon"
+"MBCB","jeffrey.allen@utsouthwestern.edu","Yang Xie <Yang.Xie@UTSouthwestern.edu>"
+"MBQN","brombach@imbi.uni-freiburg.de","Eva Brombacher [aut, cre]
+(<https://orcid.org/0000-0002-5488-0985>), Clemens Kreutz [aut,
+ctb] (<https://orcid.org/0000-0002-8796-5766>), Ariane Schad
+[aut, ctb] (<https://orcid.org/0000-0002-1921-8902>)"
+"MeasurementError.cor","bding@amgen.com","Beiying Ding"
+"MGFM;sampleClassifierData","khadija.el-amrani@charite.de","Khadija El Amrani"
+"missRows","ignacio.gonzalez@bbox.fr","Ignacio Gonzalez and Valentin Voillet"
+"MMDiff2","gschweik@staffmail.ed.ac.uk","Gabriele Schweikert [cre, aut], David Kuo [aut]"
+"NanoStringDiff","tingting.zhai@uky.edu","hong wang <hong.wang@uky.edu>, tingting zhai
+<tingting.zhai@uky.edu>, chi wang <chi.wang@uky.edu>"
+"NanoStringDiff","hong.wang@uky.edu","hong wang <hong.wang@uky.edu>, tingting zhai
+<tingting.zhai@uky.edu>, chi wang <chi.wang@uky.edu>"
+"NanoStringQCPro","ziman.robert@gene.com","Dorothee Nickles <nickles.dorothee@gene.com>, Thomas Sandmann
+<sandmann.thomas@gene.com>, Robert Ziman
+<ziman.robert@gene.com>, Richard Bourgon
+<bourgon.richard@gene.com>"
+"pandaR;yarn","paulson.joseph@gene.com","Dan Schlauch, Joseph N. Paulson, Albert Young, John
+Quackenbush, Kimberly Glass;Joseph N Paulson [aut, cre], Cho-Yi Chen [aut], Camila
+Lopes-Ramos [aut], Marieke Kuijjer [aut], John Platig [aut],
+Abhijeet Sonawane [aut], Maud Fagny [aut], Kimberly Glass
+[aut], John Quackenbush [aut]"
+"panp","peter.warren@verizon.net","Peter Warren"
+"pmm","adrewek@stat.math.ethz.ch","Anna Drewek"
+"prebs;prebsdata","karolis.uziela@scilifelab.se","Karolis Uziela and Antti Honkela"
+"profileScoreDist","pal-olof.westermark@charite.de","Paal O. Westermark"
+"QuaternaryProd","cfakhry@cs.umb.edu","Carl Tony Fakhry [cre, aut], Ping Chen [ths], Kourosh
+Zarringhalam [aut, ths]"
+"rain","paul.thaben@charite.de","Paul F. Thaben, Pål O. Westermark"
+"ReQON","cabanskc@gmail.com","Christopher Cabanski, Keary Cavin, Chris Bizon"
+"RGSEA","ccma@sibs.ac.cn","Chengcheng Ma"
+"ribor","michaelgeng@utexas.edu","Michael Geng [cre, aut], Hakan Ozadam [aut], Can Cenik [aut]"
+"rifi","jens.georg@biologie.uni-freiburg.de","Loubna Youssar [aut, ctb], Walja Wanney [aut, ctb], Jens Georg
+[aut, cre]"
+"RImmPort","rshankar@stanford.edu","Ravi Shankar <rshankar@stanford.edu>"
+"savR","brent.calder@einstein.yu.edu","R. Brent Calder"
+"SCANVIS","pagius@nygenome.org","Phaedra Agius <pagius@nygenome.org>"
+"scmeth","divyswar01@g.harvard.edu","Divy Kangeyan <divyswar01@g.harvard.edu>"
+"SDAMS","yuntong.li@uky.edu","Yuntong Li <yuntong.li@uky.edu>, Chi Wang <chi.wang@uky.edu>,
+Li Chen <lichenuky@uky.edu>"
+"sincell","antonio.rausell@isb-sib.ch","Miguel Julia <migueljuliamolina@gmail.com>, Amalio Telenti
+<atelenti@jcvi.org>, Antonio Rausell
+<antonio.rausell@isb-sib.ch>"
+"slalom","davis@ebi.ac.uk","Florian Buettner [aut], Naruemon Pratanwanich [aut], Davis
+McCarthy [aut, cre], John Marioni [aut], Oliver Stegle [aut]"
+"SLqPCR","kohl@sirs-lab.com","Matthias Kohl"
+"SMAP","robin.andersson@lcb.uu.se","Robin Andersson <robin.andersson@lcb.uu.se>"
+"SpeCond","florence@ebi.ac.uk","Florence Cavalli"
+"SPEM","yangxinyi@picb.ac.cn","Xinyi YANG Developer, Jennifer E. DENT Developer and Christine
+NARDINI Supervisor"
+"SQUADD","martial.sankar@sib.swiss","Martial Sankar, supervised by Christian Hardtke and Ioannis
+Xenarios"
+"sscore","rkennedy@ms.soph.uab.edu","Richard Kennedy <rkennedy@ms.soph.uab.edu>, based on C++ code
+from Li Zhang <zhangli@odin.mdacc.tmc.edu> and Borland Delphi
+code from Robnet Kerns <rtkerns@vcu.edu>."
+"sSeq","dyu@purdue.edu","Danni Yu <dyu@purdue.edu>, Wolfgang Huber <whuber@embl.de> and
+Olga Vitek <ovitek@purdue.edu>"
+"ssize","greg@random-technologies-llc.com","Gregory R. Warnes, Peng Liu, and Fasheng Li"
+"staRank","juliane.siebourg@bsse.ethz.ch","Juliane Siebourg, Niko Beerenwinkel"
+"STATegRa","david.gomezcabrero@ki.se","STATegra Consortia"
+"SubCellBarCode","taner.arslan@ki.se","Taner Arslan"
+"SwathXtend","jwu@proteome.org.au","J WU and D Pascovici"
+"timecourse","yuchuan@stat.berkeley.edu","Yu Chuan Tai"
+"TTMap","rachel.jeitziner@epfl.ch","Rachel Jeitziner"
+"tweeDEseq;tweeDEseqCountData","jrgonzalez@creal.cat","Juan R Gonzalez <jrgonzalez@creal.cat> and Mikel Esnaola
+<mesnaola@creal.cat> (with contributions from Robert Castelo
+<robert.castelo@upf.edu>)"
+"XNAString","marianna.plucinska@roche.com","Anna Górska [aut], Marianna Plucinska [aut, cre], Lykke
+Pedersen [aut], Lukasz Kielpinski [aut], Disa Tehler [aut],
+Peter H. Hagedorn [aut]"
+"genotypeeval","tom.jennifer@gene.com","Jennifer Tom [aut, cre]"
+"baySeq;segmentSeq;riboSeqR;clusterSeq","tjh48@cam.ac.uk","Thomas J. Hardcastle;Thomas J. Hardcastle & Irene Papatheodorou"
+"ArrayExpressHTS","filimon@ebi.ac.uk","Angela Goncalves, Andrew Tikhonov"
+"copynumber","gronilse@ifi.uio.no","Gro Nilsen, Knut Liestoel and Ole Christian Lingjaerde."
+"STAN","campos@mpipz.mpg.de","Benedikt Zacher, Julia Ertl, Rafael Campos-Martin, Julien
+Gagneur, Achim Tresch"
+"CopywriteR;CopyhelpeR;SCLCBam","o.krijgsman@nki.nl","Thomas Kuilman"
+"GeneAccord","ariane.moore@bsse.ethz.ch","Ariane L. Moore, Jack Kuipers and Niko Beerenwinkel"
+"SOMNiBUS","audrey@mims.ai","Kaiqiong Zhao [aut], Kathleen Klein [cre], Audrey Lemaçon [ctb,
+ctr], Simon Laurin-Lemay [ctb, ctr], My Intelligent Machines
+Inc. [ctr], Celia Greenwood [ths, aut]"
+"affycompData;affydata","hj@jhu.edu","Rafael A. Irizarry <rafa@jhu.edu> and Zhijin Wu
+<zwu@stat.brown.edu> with contributions from Simon Cawley
+<simon_cawley@affymetrix.com>;Laurent Gautier <laurent@cbs.dtu.dk>"
+"AffymetrixDataTestFiles","hb@stat.berkeley.edu","Henrik Bengtsson [aut, cre], James Bullard [aut], Kasper Daniel
+Hansen [aut]"
+"beadarrayExampleData","mark.dunning@cancer.org.uk","Mark Dunning"
+"ChIPXpressData","gewu@jhsph.edu","George Wu"
+"CluMSIDdata","tobias.depke@helmholtz-hzi.de","Tobias Depke [aut, cre]"
+"diffloopdata","caleblareau@g.harvard.edu","Caleb Lareau [aut], Martin Aryee [aut, cre]"
+"DLBCL","marcus.dittrich@biocentrum.uni-wuerzburg.de","Marcus Dittrich and Daniela Beisser"
+"FANTOM3and4CAGE","vanja.haberle@bio.uib.no","Vanja Haberle, Department of Biology, University of Bergen,
+Norway <vanja.haberle@bio.uib.no>"
+"fibroEset","merk@ibe.med.uni-muenchen.de","Sylvia Merk"
+"FlowSorted.CordBloodNorway.450k","kristina.gervin@medisin.uio.no","kristina gervin [cre, aut], Kasper Daniel Hansen [aut]"
+"gcspikelite","mrobinson@wehi.edu.au","Mark Robinson <mrobinson@wehi.edu.au>"
+"grndata","pau.bellot@upc.edu","Pau Bellot, Catharina Olsen, Patrick E Meyer"
+"hapmap100khind;hapmap100kxba;hapmap500knsp;hapmap500ksty;hapmapsnp5;hapmapsnp6;maqcExpression4plex","benilton.carvalho@cancer.org.uk","Hapmap Consortium;NimbleGen Systems"
+"healthyFlowData","aazad@purdue.edu","Ariful Azad"
+"HEEBOdata;MEEBOdata","apaquet@medsfgh.ucsf.edu","Agnes Paquet"
+"JASPAR2014;JASPAR2016","ge.tan09@imperial.ac.uk","Ge Tan <ge.tan09@imperial.ac.uk>"
+"lumiBarnes","dupan@northwestern.edu","Pan Du"
+"LungCancerLines","barr.cory@gene.com","Cory Barr, Michael Lawrence"
+"MAQCsubsetILM;synapterdata","lg390@cam.ac.uk","Laurent Gatto;Laurent Gatto, Sebastian Gibb and Pavel V. Shliaha"
+"MEDIPSData","lchavez@liai.org","Lukas Chavez"
+"MIGSAdata","jcrodriguez@bdmg.com.ar","Juan C. Rodriguez, Cristobal Fresno, Andrea S. Llera and Elmer
+A. Fernandez"
+"MMDiffBamSubset","g.schweikert@ed.ac.uk","Gabriele Schweikert"
+"msd16s","jpaulson@umiacs.umd.edu","Joseph N. Paulson, Hector Corrada Bravo, Mihai Pop"
+"pd.atdschip.tiling","kristof.debeuf@ugent.be","Kristof De Beuf"
+"scanMiRData","fridolin.gross@hest.ethz.ch","Pierre-Luc Germain [aut]
+(<https://orcid.org/0000-0003-3418-4218>), Michael Soutschek
+[aut], Fridolin Gross [cre, aut]"
+"stjudem","toedling@ebi.ac.uk","Benjamin Georgi, Matthias Heinig, Sebastian Schmeier, Joern
+Toedling"
+"SVM2CRMdata","guidantonio.malagolitagliazucchi@unimore.it","Guidantonio Malagoli Tagliazucchi"
+"yeastRNASeq","bullard@stat.berkeley.edu","James H. Bullard and Kasper D. Hansen"
+"fluentGenomics","lee.s@wehi.edu.au","Stuart Lee [aut, cre]
+(<https://orcid.org/0000-0003-1179-8436>), Michael Love [aut,
+ctb]"
