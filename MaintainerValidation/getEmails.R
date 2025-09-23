@@ -71,3 +71,9 @@ email_only <- unique(email_df[,"Email"])
 temp <- lapply(email_only, write, "EmailList.txt", append=TRUE)
 
 save.image("GetEmailList.RData")
+
+
+
+### Now I need to find updates
+### New entries
+### Deleted entries
