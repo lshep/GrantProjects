@@ -3,6 +3,10 @@ library(stringr)
 library(RSQLite)
 library(DBI)
 library(jsonlite)
+library(httr2)
+
+## change for live location
+url_base = "http://127.0.0.1:4567"
 
 debug=FALSE
 
@@ -136,6 +140,9 @@ is_new_pair <- function(pkg, email) {
 
 new_rows <- email_df[mapply(is_new_pair, email_df$Package, email_df$Email), ]
 
+## test json to debug api addition rather than addition here
+
+
 if(nrow(new_rows) > 0){
 
     to_insert <- data.frame(
@@ -192,6 +199,7 @@ if (nrow(deleted_pairs) > 0) {
 ## ------------------------------------------------------------------------------## 
 
 ## query <- "UPDATE maintainers set consent_date='2024-02-14' where id IN (3901,3903,3898)"
+## query <- "UPDATE maintainers set consent_date='2024-02-14' where package='BiocFileCache';
 ## dbExecute(con, query)
 
 query <- "
@@ -211,10 +219,21 @@ if(debug) print(stale_unique)
 # Save to JSON
 if (nrow(stale_unique) > 0) {
   json_payload <- toJSON(stale_unique, pretty = TRUE, auto_unbox = TRUE, na = "null")
-  message("Stale consent entries (null or >1 year) converted to JSON")
+  email_url <- paste0(url_base, "/send-verification")
+  response <- request(email_url) %>%
+      req_headers("Content-Type" = "application/json") %>%
+      req_body_raw(json_payload) %>%
+      req_perform()
+  if (resp_status(response) == 200){
+      message("Verification request sent successfully")
+  }else{
+      warning("Failed to send verification request. Status: ", resp_status(response))
+  }
 } else {
   message("No stale consent entries found.")
 }
+
+
 
 ## write sample json for ruby debugging
 ## write(json_payload, file = "mock_verification.json")
@@ -234,3 +253,55 @@ dbDisconnect(con)
 ## )
 ## json_data <- toJSON(maintainers, pretty = TRUE, auto_unbox = TRUE)
 ## write(json_data, file = "mock_maintainers.json")
+
+## -------------------------------------------------------------------------##
+## -------------------------------------------------------------------------##
+##    Tests adding missing using api
+##     would have to manually remove from sqlite database and not run R code
+##     above and grab new_rows to complete test here
+## -------------------------------------------------------------------------##
+## -------------------------------------------------------------------------##
+
+## # Make sure column names are lowercase
+## colnames(new_rows) <- tolower(colnames(new_rows))
+
+## # Convert each row to a named list
+## payload_list <- lapply(seq_len(nrow(new_rows)), function(i) {
+##   list(
+##     package = as.character(new_rows$package[i]),
+##     name    = as.character(new_rows$name[i]),
+##     email   = as.character(new_rows$email[i])
+##   )
+## })
+
+## # Convert to JSON array
+## json_payload <- toJSON(payload_list, auto_unbox = TRUE)
+
+## # Your endpoint URL
+## endpoint <- "http://127.0.0.1:4567/add-entries"
+
+## # Make POST request
+## response <- request(endpoint) %>%
+##   req_headers("Content-Type" = "application/json") %>%
+##   req_body_raw(json_payload) %>%
+##   req_perform()
+
+## resp_status(response)
+## resp_body_string(response)
+
+## -------------------------------------------------------------------------##
+## -------------------------------------------------------------------------##
+##   Tests accept policy link 
+## -------------------------------------------------------------------------##
+## -------------------------------------------------------------------------##
+
+## grab this from testing the mock email validation section after changing
+## database consent_date
+
+## endpoint_url <- "http://127.0.0.1:4567/acceptpolicies/lori.shepherd@roswellpark.org/accept/9d05e78869c2bc2999f00a72096ac80ca7a28fe0"
+
+## response <- request(endpoint_url) %>%
+##   req_perform()
+
+## resp_status(response)
+## resp_body_string(response)

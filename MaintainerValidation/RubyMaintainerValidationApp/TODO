@@ -1,0 +1,5 @@
+Bug Fix: Have an Update when an email or name is updated 
+
+Build out GET endpoint to query database
+
+Update core.db to integrate with ses to retrieve bounced/failed emails

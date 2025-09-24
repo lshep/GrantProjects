@@ -6,6 +6,15 @@ require 'securerandom'
 require 'aws-sdk-ses'
 require 'date'
 
+class String
+  # Strip leading whitespace from each line that is the same as the
+  # amount of whitespace on the first line of the string.
+  # Leaves _additional_ indentation on later lines intact.
+  def unindent()
+    gsub(/^#{self[/\A[ \t]*/]}/,'')
+  end
+end
+
 class CoreConfig
   @@request_uri  = nil
   @@db = nil
@@ -52,16 +61,12 @@ module Core
     SQL
   end
 
-  def Core.process_verification_payload(request_body)
+  def Core.process_verification_payload(payload, base_url)
     if CoreConfig.request_uri.nil?
-      CoreConfig.set_request_uri(request.base_url)
-    end
-    if Core.is_spoof? request
-      puts "Unknown IP address"
-      return [400, "Unknown IP address"]
+      CoreConfig.set_request_uri(base_url)
     end
     begin
-      payload = JSON.parse(request_body)
+      payload = JSON.parse(payload)
     rescue JSON::ParserError
       return [400, "Invalid JSON"]
     end
@@ -240,7 +245,7 @@ module Core
   def Core.add_entry_to_db(package, name, email)
     consent_date = Date.today.to_s
     CoreConfig.db.execute "insert into maintainers (package, name, email, consent_date, email_status, is_email_valid) values (?,?,?,?,?,?)",
-                          [package, name, email, consent_date, "valid", true]
+                          [package, name, email, consent_date, "valid", 1]
   end
 
   def Core.process_new_entries_payload(request_body)
