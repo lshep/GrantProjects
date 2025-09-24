@@ -141,30 +141,41 @@ module Core
 
   
   def Core.send_email(from, to, subject, message)
-    aws = CoreConfig.auth_config['aws']
-    ses = Aws::SES::Client.new(
-      region: aws['region'],
-      access_key_id: aws['aws_access_key_id'],
-      secret_access_key: aws['aws_secret_access_key']
-    )
-    ses.send_email({
-      source: from, # required
-      destination: { # required
-        to_addresses: [to]
-      },
-      message: { # required
-        subject: { # required
-          data: subject, # required
-          charset: "UTF-8",
-        },
-        body: { # required
-          text: {
-            data: message, # required
-            charset: "UTF-8",
-          }
-        },
-      }
-    })
+
+    if ENV['SEND_VERIFICATION_EMAILS'] == 'true'
+      aws = CoreConfig.auth_config['aws']
+      ses = Aws::SES::Client.new(
+        region: aws['region'],
+        access_key_id: aws['aws_access_key_id'],
+        secret_access_key: aws['aws_secret_access_key']
+      )
+      ses.send_email({
+                       source: from, # required
+                       destination: { # required
+                         to_addresses: [to]
+                       },
+                       message: { # required
+                         subject: { # required
+                           data: subject, # required
+                           charset: "UTF-8",
+                         },
+                         body: { # required
+                           text: {
+                             data: message, # required
+                             charset: "UTF-8",
+                           }
+                         },
+                       }
+                     })
+    else
+
+      puts "=== Mock send_email called === "
+      puts "From: #{from}"
+      puts "To: #{to}"
+      puts "Subject: #{subject}"
+      puts "Message: \n #{message}"
+      puts "==============================="
+    end
   end
   
   def Core.get_entries_by_email(email)
