@@ -1,10 +1,6 @@
 require 'sinatra'
 require_relative './core'
 
-get '/' do
-  'Nothing to see here'
-end
-
 post '/add-entries' do
   status_code, response_body = Core.process_new_entries_payload(request.body.read)
   status status_code
@@ -27,7 +23,38 @@ post '/send-verification' do
   end
 end
 
+get '/' do
+  'Nothing to see here'
+end
+
 get '/acceptpolicies/:email/:action/:password' do
   return Core.accept_policies(params[:email], params[:action], params[:password])
 end
 
+get '/info/package/:pkg' do
+  'Nothing to see here'
+end
+
+get '/info/name/:name' do
+  'Nothing to see here'
+end
+
+get '/info/email/:email' do
+  'Nothing to see here'
+end
+
+get '/info/valid/:email' do
+  'Nothing to see here'
+end
+
+get '/list/invalid/' do
+  'Nothing to see here'
+end
+
+get '/list/needs-consent/' do
+  'Nothing to see here'
+end
+
+get '/list/bademails/' do
+  'Nothing to see here'
+end
