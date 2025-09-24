@@ -3,7 +3,7 @@ require 'json'
 require 'sqlite3'
 require 'bcrypt'
 require 'securerandom'
-require 'aws-sdk'
+require 'aws-sdk-ses'
 require 'date'
 
 class CoreConfig
@@ -36,7 +36,7 @@ module Core
 
   dbfile = File.join(File.dirname(__FILE__), "db.sqlite3" )
   CoreConfig.set_db(SQLite3::Database.new dbfile)
-  if (!File.exists? dbfile) or (File.size(dbfile) == 0)
+  if (!File.exist?(dbfile)) or (File.size(dbfile) == 0)
     rows = CoreConfig.db.execute <<-SQL.unindent
       create table maintainers (
         id integer primary key autoincrement,
