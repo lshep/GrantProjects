@@ -11,3 +11,5 @@ Build out GET endpoint to query database
 
 Update core.db to integrate with ses to retrieve bounced/failed emails and
 update email_status 
+
+Dashboard view of database?
