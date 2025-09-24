@@ -2,13 +2,17 @@ Bug Fix: Have an Update when an email or name is updated for a given package
 
 Build out GET endpoint to query database
       / to give a list of available endpoints
+
       give a package, print all info
+
       give a name print all info (packages, is valid)
+
       give a email is it valid/consented
+
       give a email print all info (packages, is valid)
-      endpoint to list all invalid emails
-      endpoint to list all not consented
-      endpoint to list combo all invalid and not consented
+      
+      ?? update list invalid emails to also give email_status (theoretically if
+      can get bounce/failure/etc status from ses)
 
 Update core.db to integrate with ses to retrieve bounced/failed emails and
 update email_status 

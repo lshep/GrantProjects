@@ -305,3 +305,15 @@ dbDisconnect(con)
 
 ## resp_status(response)
 ## resp_body_string(response)
+
+## Testing Endpoints
+
+## endpoint_url = "http://127.0.0.1:4567/list/invalid/"
+## response <- request(endpoint_url) %>% req_perform()
+
+## endpoint_url = "http://127.0.0.1:4567/list/needs-consent/"
+## response <- request(endpoint_url) %>% req_perform()
+
+## endpoint_url = "http://127.0.0.1:4567/list/bademails/"
+## response <- request(endpoint_url) %>% req_perform()
+

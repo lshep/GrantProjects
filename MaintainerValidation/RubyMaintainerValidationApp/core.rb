@@ -61,6 +61,7 @@ module Core
     SQL
   end
 
+  
   def Core.process_verification_payload(payload, base_url)
     if CoreConfig.request_uri.nil?
       CoreConfig.set_request_uri(base_url)
@@ -107,6 +108,7 @@ module Core
     return Core.email_validation_request(name, email, password)
     
   end
+
   
   def Core.email_validation_request(name, email, password)
     recipient_email = email
@@ -142,7 +144,6 @@ module Core
       "Action required: Please Verify Bioconductor Policies",
       msg)
   end
-
 
   
   def Core.send_email(from, to, subject, message)
@@ -232,22 +233,6 @@ module Core
   end
 
  
-  def Core.handle_new_entries(entry)
-
-    package = entry['package']
-    name = entry['name'] || "Maintainer"
-    email = entry['email']
-       
-    Core.add_entry_to_db(package, name, email)
-    return "new entry added for package #{package} and email #{email}"
-  end
-
-  def Core.add_entry_to_db(package, name, email)
-    consent_date = Date.today.to_s
-    CoreConfig.db.execute "insert into maintainers (package, name, email, consent_date, email_status, is_email_valid) values (?,?,?,?,?,?)",
-                          [package, name, email, consent_date, "valid", 1]
-  end
-
   def Core.process_new_entries_payload(request_body)
     begin
       payload = JSON.parse(request_body)
@@ -272,5 +257,64 @@ module Core
     
     [200, { results: results }.to_json]
   end
+
+
+  def Core.handle_new_entries(entry)
+
+    package = entry['package']
+    name = entry['name'] || "Maintainer"
+    email = entry['email']
+       
+    Core.add_entry_to_db(package, name, email)
+    return "new entry added for package #{package} and email #{email}"
+  end
+
   
+  def Core.add_entry_to_db(package, name, email)
+    consent_date = Date.today.to_s
+    CoreConfig.db.execute "insert into maintainers (package, name, email, consent_date, email_status, is_email_valid) values (?,?,?,?,?,?)",
+                          [package, name, email, consent_date, "valid", 1]
+  end
+
+
+  def Core.get_package_info(package)
+    return "placeholder"
+  end
+
+  
+  def Core.get_name_info(name)
+    return "placeholder"
+  end
+
+
+  def Core.get_email_info(email)
+    return "placeholder"
+  end
+
+  
+  def Core.is_email_valid(email)
+    return "placeholder"
+  end
+
+  
+  def Core.list_invalid()
+    emails = CoreConfig.db.execute("SELECT DISTINCT email FROM maintainers WHERE is_email_valid IS NULL OR is_email_valid = 0")
+    return emails.to_json
+  end
+
+
+  def Core.list_needs_consent()
+    emails = CoreConfig.db.execute("SELECT DISTINCT email FROM maintainers WHERE consent_date IS NULL OR  DATE(consent_date) <= DATE('now', '-1 year')")
+    return emails.to_json
+  end
+
+
+  def Core.list_bad_emails()
+    emails = CoreConfig.db.execute("SELECT DISTINCT email FROM maintainers WHERE 
+                                   consent_date IS NULL OR  DATE(consent_date)
+                                   <= DATE('now', '-1 year') OR 
+                                   is_email_valid IS NULL OR is_email_valid = 0")
+    return emails.to_json
+  end
+
 end
