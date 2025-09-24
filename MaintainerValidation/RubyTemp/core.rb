@@ -40,21 +40,20 @@ module Core
   if (!File.exists? dbfile) or (File.size(dbfile) == 0)
     rows = CoreConfig.db.execute <<-SQL.unindent
       create table maintainers (
-        id integer primary key,
+        id integer primary key autoincrement,
         package varchar(255) not null,
         name varchar(255) not null,
         email varchar(255) not null,
         consent_date date,
         pw_hash varchar(255),
         email_status varchar(255),
-        is_email_valid boolean
+        is_email_valid boolean,
+        unique(package, email)
       );
     SQL
   end
 
-  
-  def Core.handle_post(request)   ## TODO: Work in progress
-    
+  def Core.process_verification_payload(request_body)
     if CoreConfig.request_uri.nil?
       CoreConfig.set_request_uri(request.base_url)
     end
@@ -63,39 +62,46 @@ module Core
       return [400, "Unknown IP address"]
     end
     begin
-      json = request.body.read
-      obj = JSON.parse json
+      payload = JSON.parse(request_body)
     rescue JSON::ParserError
-      return [400, "Failed to parse JSON"]
+      return [400, "Invalid JSON"]
     end
-    if obj.has_key? 'action' and  obj['action'] == "newentry"
-      return Core.handle_new_entries(obj)
+
+    unless payload.is_a?(Array)
+      return [400, "Expected an array of maintainers"]
     end
-    if obj.has_key? 'action' and  obj['action'] == "verification"
-      return Core.handle_verify_email(obj)
+
+    results = []
+
+    payload.uniq { |entry| entry['email'] }.each do |entry|
+      email = entry['email']
+      name = entry['name'] || "Maintainer"
+
+      begin
+        result = Core.handle_verify_email({'email' => email, 'name' => name})
+        results << { email: email, status: "success", message: result }
+      rescue => e
+        results << { email: email, status: "error", message: e.message }
+      end
     end
-    
-  end
-    
-  def Core.handle_new_entries(obj)
-    ## TODO: loop over all new entries?
-    Core.add_entry_to_db(package, name, email)
-    return "new entry added"
+
+    [200, { results: results }.to_json]
   end
 
-  def Core.add_entry_to_db(package, name, email)
-    consent_date = Date.today.to_s
-    CoreConfig.db.execute "insert into maintainers (package, name, email, consent_date, email_status, is_email_valid) values (?,?,?,?,?,?)",
-                          package, name, email, consent_date, "valid", true
-  end
 
   def Core.handle_verify_email(obj)
+    email = obj['email']
+    name = obj['name'] || "Maintainer"
 
     password = SecureRandom.hex(20)
     hash = BCrypt::Password.create(password)
-    ## TODO:  add hash to database
+
+    CoreConfig.db.execute("UPDATE maintainers SET pw_hash = ? WHERE email = ?",
+                          [hash, email])
+    
+    ## puts "Would send email to #{email} (#{name}) with password: #{password}"
     return Core.email_validation_request(name, email, password)
-      
+    
   end
   
   def Core.email_validation_request(name, email, password)
@@ -161,16 +167,16 @@ module Core
       }
     })
   end
-
-
+  
   def Core.get_entries_by_email(email)
     results_as_hash = CoreConfig.db.results_as_hash
     begin
       CoreConfig.db.results_as_hash = true
-      rows = CoreConfig.db.execute("select * from maintainers where email = ?",
-                                   email)
-      return nil if rows.empty?
-      return rows ## NOTE: Does this work right? 
+      rows = CoreConfig.db.execute(
+        "SELECT * FROM maintainers WHERE email = ?",
+        email
+      )
+      return rows
     ensure
       CoreConfig.db.results_as_hash = results_as_hash
     end
@@ -178,18 +184,78 @@ module Core
 
 
   def Core.accept_policies(email, action, password)
-    
     entries = Core.get_entries_by_email(email)
-    correct_password = BCrypt::Password.new(repos['pw_hash']) # FIX ME: might have multiple rows
-    unless correct_password == password
-      return "wrong password, you are not authorized"
+
+    return "No entries found for this email." if entries.empty?
+
+    matched = false
+    consent_date = Date.today.to_s
+  
+    entries.each do |entry|
+      pw_hash = entry['pw_hash']
+
+      next if pw_hash.nil? || pw_hash.strip.empty?
+
+      begin
+        if BCrypt::Password.new(pw_hash) == password
+          CoreConfig.db.execute(
+            "UPDATE maintainers SET consent_date = ?, pw_hash = NULL WHERE id = ?",
+            [consent_date, entry['id']]
+          )
+          matched = true
+        end
+      rescue BCrypt::Errors::InvalidHash => e
+        next
+      end
     end
 
-    ## TODO
-    ## update datebase with valid email and new consent date
-    consent_date = Date.today.to_s
-
+    if matched
+      return "Thank you! Your policy acceptance has been recorded."
+    else
+      return "Invalid password. You are not authorized to accept policies."
+    end
   end
 
+ 
+  def Core.handle_new_entries(entry)
+
+    package = entry['package']
+    name = entry['name'] || "Maintainer"
+    email = entry['email']
+       
+    Core.add_entry_to_db(package, name, email)
+    return "new entry added for package #{package} and email #{email}"
+  end
+
+  def Core.add_entry_to_db(package, name, email)
+    consent_date = Date.today.to_s
+    CoreConfig.db.execute "insert into maintainers (package, name, email, consent_date, email_status, is_email_valid) values (?,?,?,?,?,?)",
+                          [package, name, email, consent_date, "valid", true]
+  end
+
+  def Core.process_new_entries_payload(request_body)
+    begin
+      payload = JSON.parse(request_body)
+    rescue JSON::ParserError
+      return [400, "Invalid JSON"]
+    end
+    
+    unless payload.is_a?(Array)
+      return [400, "Expected an array of entries"]
+    end
+    
+    results = []
+
+    payload.each do |entry|
+      begin
+        message = Core.handle_new_entries(entry)
+        results << { email: entry['email'], package: entry['package'], status: "success", message: message }
+      rescue => e
+        results << { email: entry['email'], package: entry['package'], status: "error", message: e.message }
+      end
+    end
+    
+    [200, { results: results }.to_json]
+  end
   
 end

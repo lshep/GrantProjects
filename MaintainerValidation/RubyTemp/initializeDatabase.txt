@@ -1,0 +1,15 @@
+## If you don't want to rely on the code in R or ruby
+
+sqlite3 db.sqlite3
+
+CREATE TABLE maintainers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    package VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    consent_date DATE,
+    pw_hash VARCHAR(255),
+    email_status VARCHAR(255),
+    is_email_valid BOOLEAN,
+    UNIQUE(package, email)
+);
