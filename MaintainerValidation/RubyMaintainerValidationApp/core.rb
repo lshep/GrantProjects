@@ -5,7 +5,6 @@ require 'bcrypt'
 require 'securerandom'
 require 'aws-sdk'
 require 'date'
-require 'open-uri'
 
 class CoreConfig
   @@request_uri  = nil
