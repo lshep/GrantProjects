@@ -278,17 +278,38 @@ module Core
 
 
   def Core.get_package_info(package)
-    return "placeholder"
+    results_as_hash = CoreConfig.db.results_as_hash
+    begin
+      CoreConfig.db.results_as_hash = true
+      info = CoreConfig.db.execute("SELECT DISTINCT * FROM maintainers WHERE package = ?", package)
+      return info.to_json
+    ensure
+      CoreConfig.db.results_as_hash = results_as_hash
+    end
   end
 
   
   def Core.get_name_info(name)
-    return "placeholder"
+    results_as_hash = CoreConfig.db.results_as_hash
+    begin
+      CoreConfig.db.results_as_hash = true
+      info = CoreConfig.db.execute("SELECT DISTINCT * FROM maintainers WHERE name = ?", name)
+      return info.to_json
+    ensure
+      CoreConfig.db.results_as_hash = results_as_hash
+    end
   end
 
 
   def Core.get_email_info(email)
-    return "placeholder"
+    results_as_hash = CoreConfig.db.results_as_hash
+    begin
+      CoreConfig.db.results_as_hash = true
+      info = CoreConfig.db.execute("SELECT DISTINCT * FROM maintainers WHERE email = ?", email)
+      return info.to_json
+    ensure
+      CoreConfig.db.results_as_hash = results_as_hash
+    end
   end
 
   

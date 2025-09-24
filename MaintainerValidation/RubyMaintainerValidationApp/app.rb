@@ -32,18 +32,22 @@ get '/acceptpolicies/:email/:action/:password' do
 end
 
 get '/info/package/:pkg' do
+  content_type :json
   return Core.get_package_info(params[:pkg])
 end
 
 get '/info/name/:name' do
+  content_type :json
   return Core.get_name_info(params[:name])
 end
 
 get '/info/email/:email' do
+  content_type :json
   return Core.get_email_info(params[:email])
 end
 
 get '/info/valid/:email' do
+  content_type :json
   return Core.is_email_valid(params[:email])
 end
 
@@ -58,5 +62,6 @@ get '/list/needs-consent/' do
 end
 
 get '/list/bademails/' do
+  content_type :json
   return Core.list_bad_emails()
 end
