@@ -36,9 +36,9 @@ get '/info/package/:pkg' do
   return Core.get_package_info(params[:pkg])
 end
 
-get '/info/name/:name' do
+get %r{/info/name/(.+)} do |name|
   content_type :json
-  return Core.get_name_info(params[:name])
+  return Core.get_name_info(name)
 end
 
 get '/info/email/:email' do

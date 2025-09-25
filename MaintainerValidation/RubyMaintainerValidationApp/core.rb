@@ -281,7 +281,7 @@ module Core
     results_as_hash = CoreConfig.db.results_as_hash
     begin
       CoreConfig.db.results_as_hash = true
-      info = CoreConfig.db.execute("SELECT DISTINCT * FROM maintainers WHERE package = ?", package)
+      info = CoreConfig.db.execute("SELECT DISTINCT package, name, email, consent_date, email_status, is_email_valid FROM maintainers WHERE package = ?", package)
       return info.to_json
     ensure
       CoreConfig.db.results_as_hash = results_as_hash
@@ -293,7 +293,7 @@ module Core
     results_as_hash = CoreConfig.db.results_as_hash
     begin
       CoreConfig.db.results_as_hash = true
-      info = CoreConfig.db.execute("SELECT DISTINCT * FROM maintainers WHERE name = ?", name)
+      info = CoreConfig.db.execute("SELECT DISTINCT name, package, email, consent_date, email_status, is_email_valid FROM maintainers WHERE name = ?", name)
       return info.to_json
     ensure
       CoreConfig.db.results_as_hash = results_as_hash
@@ -305,7 +305,7 @@ module Core
     results_as_hash = CoreConfig.db.results_as_hash
     begin
       CoreConfig.db.results_as_hash = true
-      info = CoreConfig.db.execute("SELECT DISTINCT * FROM maintainers WHERE email = ?", email)
+      info = CoreConfig.db.execute("SELECT DISTINCT email, name, package, consent_date, email_status, is_email_valid FROM maintainers WHERE email = ?", email)
       return info.to_json
     ensure
       CoreConfig.db.results_as_hash = results_as_hash
@@ -314,7 +314,18 @@ module Core
 
   
   def Core.is_email_valid(email)
-    return "placeholder"
+    results_as_hash = CoreConfig.db.results_as_hash
+    begin
+      CoreConfig.db.results_as_hash = true
+      info = CoreConfig.db.execute("SELECT DISTINCT email, name, package, consent_date, email_status, is_email_valid FROM maintainers WHERE email = ? AND (is_email_valid IS NULL OR is_email_valid = 0)", email)
+      if info.empty?
+        return {valid: true}.to_json
+      else
+        return {valid: false, data: info}.to_json
+      end
+    ensure
+      CoreConfig.db.results_as_hash = results_as_hash
+    end
   end
 
   
@@ -337,5 +348,5 @@ module Core
                                    is_email_valid IS NULL OR is_email_valid = 0")
     return emails.to_json
   end
-
+  
 end

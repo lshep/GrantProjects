@@ -2,15 +2,7 @@ Bug Fix: Have an Update when an email or name is updated for a given package
 
 Build out GET endpoint to query database
       / to give a list of available endpoints
-
-      give a package, print all info
-
-      give a name print all info (packages, is valid)
-
-      give a email is it valid/consented
-
-      give a email print all info (packages, is valid)
-      
+     
       ?? update list invalid emails to also give email_status (theoretically if
       can get bounce/failure/etc status from ses)
 
