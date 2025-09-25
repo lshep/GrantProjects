@@ -23,6 +23,14 @@ post '/add-entries' do
   response_body
 end
 
+post '/sns/notifications' do
+  request.body.rewind
+  payload = request.body.read
+  status, message = Core.process_sns_notification(payload)
+  status status
+  message
+end
+
 get '/' do
   send_file File.join(settings.public_folder, 'description.html')
 end

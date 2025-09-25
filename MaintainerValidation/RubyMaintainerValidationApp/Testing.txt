@@ -26,7 +26,8 @@ library(httr2)
 maintainers <- list(
     list(package = "pkgA", name = "Alice Example", email = "alice@example.com"),
     list(package = "pkgB", name = "Bob Example", email = "bob@example.com"),
-    list(package = "pkgC", name = "Carol Example", email = "carol@example.com")
+    list(package = "pkgC", name = "Carol Example", email = "carol@example.com"),
+    list(package = "pkgD", name = "Carol Example", email = "carol@example.com")
 )
 json_payload <- toJSON(maintainers, pretty = TRUE, auto_unbox = TRUE)
 ## write(json_payload, file = "mock_maintainers.json")
@@ -100,8 +101,7 @@ resp_body_string(response)
 ## database consent_date. Something like:
 library(httr2)
 
-endpoint_url <- "http://127.0.0.1:4567/acceptpolicies/lori.shepherd@roswellpark.org/accept/9d05e78869c2bc2999f00a72096ac80ca7a28fe0"
-
+endpoint_url <- "http://127.0.0.1:4567/acceptpolicies/lori.shepherd@roswellpark.org/accept/2bed68d404b1e0ab30e0394abb8868448173f616"
 response <- request(endpoint_url) %>%
   req_perform()
 

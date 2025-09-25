@@ -109,6 +109,10 @@ CREATE TABLE IF NOT EXISTS maintainers (
     pw_hash TEXT,
     email_status TEXT,
     is_email_valid BOOLEAN,
+    bounce_type TEXT,
+    bounce_subtype TEXT,
+    smtp_status TEXT,
+    diagnostic_code TEXT,
     UNIQUE(package, email));
 ")
 
@@ -134,7 +138,7 @@ if(nrow(new_rows) > 0){
         email = new_rows$Email,
         consent_date = as.character(Sys.Date()),
         pw_hash = NA,
-        email_status = "valid",
+        email_status = "new",
         is_email_valid = TRUE
     )
     

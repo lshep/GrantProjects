@@ -49,13 +49,17 @@ module Core
     rows = CoreConfig.db.execute <<-SQL.unindent
       create table maintainers (
         id integer primary key autoincrement,
-        package varchar(255) not null,
+        package varchar(50) not null,
         name varchar(255) not null,
         email varchar(255) not null,
         consent_date date,
         pw_hash varchar(255),
-        email_status varchar(255),
+        email_status varchar(50),
         is_email_valid boolean,
+        bounce_type varchar(50),
+        bounce_subtype varchar(50),
+        smtp_status varchar(10),
+        diagnostic_code TEXT,
         unique(package, email)
       );
     SQL
@@ -156,22 +160,24 @@ module Core
         secret_access_key: aws['aws_secret_access_key']
       )
       ses.send_email({
-                       source: from, # required
-                       destination: { # required
-                         to_addresses: [to]
-                       },
-                       message: { # required
-                         subject: { # required
-                           data: subject, # required
+                       source: from, 
+                       destination: { to_addresses: [to] },
+                       message: {
+                         subject: {
+                           data: subject,
                            charset: "UTF-8",
                          },
-                         body: { # required
+                         body: { 
                            text: {
-                             data: message, # required
+                             data: message,
                              charset: "UTF-8",
                            }
                          },
-                       }
+                       },
+                       configuration_set_name: "BioconductorMaintainerValidationConfig",
+                       tags: [
+                         { name: "App", value: "BioconductorMaintainerValidation" }
+                       ]
                      })
     else
 
@@ -273,10 +279,10 @@ module Core
   def Core.add_entry_to_db(package, name, email)
     consent_date = Date.today.to_s
     CoreConfig.db.execute "insert into maintainers (package, name, email, consent_date, email_status, is_email_valid) values (?,?,?,?,?,?)",
-                          [package, name, email, consent_date, "valid", 1]
+                          [package, name, email, consent_date, "new", 1]
   end
 
-
+    
   def Core.get_package_info(package)
     results_as_hash = CoreConfig.db.results_as_hash
     begin
@@ -317,7 +323,9 @@ module Core
     results_as_hash = CoreConfig.db.results_as_hash
     begin
       CoreConfig.db.results_as_hash = true
-      info = CoreConfig.db.execute("SELECT DISTINCT email, name, package, consent_date, email_status, is_email_valid FROM maintainers WHERE email = ? AND (is_email_valid IS NULL OR is_email_valid = 0)", email)
+      info = CoreConfig.db.execute("SELECT DISTINCT email, name, package,
+  consent_date, email_status, is_email_valid, bounce_type, bounce_subtype,
+  smtp_status, diagnostic_code FROM maintainers WHERE email = ? AND (is_email_valid IS NULL OR is_email_valid = 0)", email)
       if info.empty?
         return {valid: true}.to_json
       else
@@ -348,5 +356,91 @@ module Core
                                    is_email_valid IS NULL OR is_email_valid = 0")
     return emails.to_json
   end
+
   
+  def Core.process_sns_notification(payload)
+    begin
+      sns_message = JSON.parse(payload)
+    rescue JSON::ParserError
+      return [400, "Invalid JSON"]
+    end
+    
+    case sns_message['Type']
+    when 'SubscriptionConfirmation'
+      # Auto-confirm subscription (optional)
+      confirm_url = sns_message['SubscribeURL']
+      Thread.new do
+        require 'net/http'
+        require 'uri'
+        uri = URI(confirm_url)
+        Net::HTTP.get(uri)
+      end
+      return [200, "Subscription confirmed"]
+      
+    when 'Notification'
+      notification = JSON.parse(sns_message['Message'])
+      
+      case notification['notificationType']
+      when 'Bounce'
+        Core.handle_bounce(notification)
+      when 'Complaint'
+        Core.handle_complaint(notification)
+      else
+      puts "Unhandled notificationType: #{notification['notificationType']}"
+      end
+      return [200, "Processed"]
+
+    else
+      return [400, "Unsupported SNS message type"]
+    end
+  end
+
+  
+  def Core.handle_bounce(notification)
+    mail = notification['mail']
+    bounce = notification['bounce']
+    tags = mail['tags'] || {}
+    
+    return unless tags['App'] && tags['App'].include?('BioconductorMaintainerValidation')
+    
+    bounce_type = bounce['bounceType']
+    bounce_subtype = bounce['bounceSubType']
+    
+    bounce['bouncedRecipients'].each do |recipient|
+      email = recipient['emailAddress']
+      smtp_status = recipient['status']
+      diagnostic_code = recipient['diagnosticCode']
+      
+      CoreConfig.db.execute(
+        "UPDATE maintainers
+         SET email_status = ?, is_email_valid = 0,
+             bounce_type = ?, bounce_subtype = ?,
+             smtp_status = ?, diagnostic_code = ?
+         WHERE email = ?",
+        ["bounced", bounce_type, bounce_subtype, smtp_status, diagnostic_code, email]
+      )
+    end
+  end
+
+  def Core.handle_complaint(notification)
+    mail = notification['mail']
+    complaint = notification['complaint']
+    tags = mail['tags'] || {}
+    
+    return unless tags['App'] && tags['App'].include?('BioconductorMaintainerValidation')
+
+    complaint['complainedRecipients'].each do |recipient|
+      email = recipient['emailAddress']
+      
+      CoreConfig.db.execute(
+        "UPDATE maintainers
+         SET email_status = ?, is_email_valid = 0,
+             bounce_type = NULL, bounce_subtype = NULL,
+             smtp_status = NULL, diagnostic_code = NULL
+         WHERE email = ?",
+        ["complained", email]
+      )
+    end
+  end
+
 end
