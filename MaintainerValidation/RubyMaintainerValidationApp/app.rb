@@ -24,7 +24,7 @@ post '/add-entries' do
 end
 
 get '/' do
-  'Nothing to see here'
+  send_file File.join(settings.public_folder, 'description.html')
 end
 
 get '/acceptpolicies/:email/:action/:password' do
