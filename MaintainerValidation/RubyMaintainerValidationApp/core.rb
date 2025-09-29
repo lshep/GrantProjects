@@ -450,7 +450,7 @@ module Core
       CoreConfig.db.results_as_hash = true
       rows = CoreConfig.db.execute(<<-SQL)
         SELECT 
-          id, package, name, email, consent_date, email_status,
+          package, name, email, consent_date, email_status,
           is_email_valid, bounce_type, bounce_subtype, smtp_status, diagnostic_code
         FROM maintainers
       SQL
