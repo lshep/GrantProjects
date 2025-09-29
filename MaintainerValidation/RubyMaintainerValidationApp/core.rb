@@ -443,4 +443,22 @@ module Core
     end
   end
 
+  
+  def Core.get_filtered_db_dump
+    results_as_hash = CoreConfig.db.results_as_hash
+    begin
+      CoreConfig.db.results_as_hash = true
+      rows = CoreConfig.db.execute(<<-SQL)
+        SELECT 
+          id, package, name, email, consent_date, email_status,
+          is_email_valid, bounce_type, bounce_subtype, smtp_status, diagnostic_code
+        FROM maintainers
+      SQL
+      return rows
+    ensure
+      CoreConfig.db.results_as_hash = results_as_hash
+    end
+  end
+
+
 end

@@ -205,3 +205,17 @@ endpoint_url = "http://127.0.0.1:4567/info/valid/carol@example.com"
 response <- request(endpoint_url) %>% req_perform()
 resp_status(response)
 resp_body_string(response)
+
+## ------------------------------------------------------------------------------##
+##
+##  Testing json dump of database
+##
+## ------------------------------------------------------------------------------##
+
+
+endpoint_url = "http://127.0.0.1:4567/download-maintainer-db"
+response <- request(endpoint_url) %>% req_perform()
+resp_status(response)
+resp_body_string(response)
+
+

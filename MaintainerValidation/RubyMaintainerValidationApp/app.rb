@@ -73,3 +73,9 @@ get '/list/bademails/' do
   content_type :json
   return Core.list_bad_emails()
 end
+
+get '/download-maintainer-db' do
+  content_type 'application/json'
+  data = Core.get_filtered_db_dump
+  data.to_json
+end
