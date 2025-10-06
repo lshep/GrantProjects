@@ -1,0 +1,3 @@
+[submodule "MaintainerValidation/RubyMaintainerValidationApp"]
+	path = MaintainerValidation/RubyMaintainerValidationApp
+	url = git@github.com:lshep/RubyMaintainerValidationApp.git
