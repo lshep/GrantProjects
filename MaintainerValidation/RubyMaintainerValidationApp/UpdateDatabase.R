@@ -1,3 +1,14 @@
+args <- commandArgs(trailingOnly = TRUE)
+
+sendEmail <- if (length(args) == 0) {
+    FALSE
+} else if (tolower(args[1]) %in% c("true", "false")) {
+    as.logical(tolower(args[1]))
+} else {
+    message("Argument given is not a logical: TRUE/FALSE")
+    FALSE
+}
+
 library(dplyr)
 library(stringr)
 library(RSQLite)
@@ -181,37 +192,41 @@ if (nrow(deleted_pairs) > 0) {
 ##
 ## ------------------------------------------------------------------------------## 
 
-query <- "
+if(sendEmail){
+
+    query <- "
 SELECT id, name, email
 FROM maintainers
 WHERE consent_date IS NULL
   OR DATE(consent_date) <= DATE('now', '-1 year')
 "
 
-stale_consent <- dbGetQuery(con, query)
-
-stale_unique <- stale_consent %>%
-  distinct(name, email, .keep_all = TRUE)
-
-if(debug) print(stale_unique)
-
-# Save to JSON
-if (nrow(stale_unique) > 0) {
-  json_payload <- toJSON(stale_unique, pretty = TRUE, auto_unbox = TRUE, na = "null")
-  email_url <- paste0(url_base, "/send-verification")
-  response <- request(email_url) %>%
-      req_headers("Content-Type" = "application/json") %>%
-      req_body_raw(json_payload) %>%
-      req_perform()
-  if (resp_status(response) == 200){
-      message("Verification request sent successfully")
-  }else{
-      warning("Failed to send verification request. Status: ", resp_status(response))
-  }
-} else {
-  message("No stale consent entries found.")
+    stale_consent <- dbGetQuery(con, query)
+    
+    stale_unique <- stale_consent %>%
+        distinct(name, email, .keep_all = TRUE)
+    
+    if(debug) print(stale_unique)
+    
+    # Save to JSON
+    if (nrow(stale_unique) > 0) {
+        json_payload <- toJSON(stale_unique, pretty = TRUE, auto_unbox = TRUE, na = "null")
+        email_url <- paste0(url_base, "/send-verification")
+        response <- request(email_url) %>%
+            req_headers("Content-Type" = "application/json") %>%
+            req_body_raw(json_payload) %>%
+            req_perform()
+        if (resp_status(response) == 200){
+            message("Verification request sent successfully")
+        }else{
+            warning("Failed to send verification request. Status: ", resp_status(response))
+        }
+    } else {
+        message("No stale consent entries found.")
+    }
+    
 }
-
+    
 ## write sample json for ruby debugging
 ## write(json_payload, file = "mock_verification.json")
 
