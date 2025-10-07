@@ -86,7 +86,8 @@ library(shiny); library(jsonlite); library(DT); library(shinyjs); library(shinyt
 
         
         data <- reactive({
-            url <- "http://127.0.0.1:4567/download-maintainer-db"
+#            url <- "http://127.0.0.1:4567/download-maintainer-db"
+            url <- "https://pkgmaintainers.bioconductor.org/download-maintainer-db"
             df <- jsonlite::fromJSON(url)
 
             if ("is_email_valid" %in% names(df)) {
