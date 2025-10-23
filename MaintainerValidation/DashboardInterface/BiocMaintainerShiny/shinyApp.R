@@ -28,6 +28,7 @@ library(shiny); library(jsonlite); library(DT); library(shinyjs); library(shinyt
 
         navbarPage(
             title = actionLink("sidebar_button", label = NULL, icon = icon("bars")),
+            windowTitle="Bioc Maintainer Table",
             id = "navbarID",
 
             tabPanel(
