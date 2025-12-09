@@ -7,10 +7,16 @@ s3_info_url <- "s3://bioc-builddb-mirror/buildResults/*-info.csv.gz"
 s3_propagation_url <- "s3://bioc-builddb-mirror/buildResults/*-propagation_status.csv.gz"
   
 con <- dbConnect(duckdb::duckdb())
-dbExecute(con, "INSTALL httpfs;")
-dbExecute(con, "LOAD httpfs;")
 
-dbExecute(con, "CREATE OR REPLACE SECRET s3_secret (TYPE S3, PROVIDER credential_chain);")
+##
+## These should no longer be needed as the S3 bucket we are accessing is public read
+##
+if (FALSE){
+    dbExecute(con, "INSTALL httpfs;")
+    dbExecute(con, "LOAD httpfs;")
+    dbExecute(con, "CREATE OR REPLACE SECRET s3_secret (TYPE S3, PROVIDER credential_chain);")
+}
+
 
 ## s3_url <- "s3://bioc-builddb-mirror/buildResults/0015761b48700798e7a4cc3e0d5a3e00-build_summary.csv.gz"
 ## result <- dbGetQuery(con, paste("SELECT * FROM read_csv_auto('", s3_url, "')", sep = ""))

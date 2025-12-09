@@ -1,0 +1,3 @@
+
+1. create a duckdb file with added VIEWS in R script, to be run as github action
+2. create wrapper functions for querying VIEWS in R package/workflow
