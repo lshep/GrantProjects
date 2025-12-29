@@ -199,3 +199,60 @@ package_error_count <- function(packagename, builder=NULL, branch=NULL){
 
     return(countTbl)
 }
+
+package_failures_over_time <- function(packagename, builder, failure_cluster_hours = 72) {
+
+    stopifnot(is.character(packagename), length(packagename) == 1L)
+    stopifnot(is.character(builder), length(builder) == 1L)
+    stopifnot(is.numeric(failure_cluster_hours), length(failure_cluster_hours) == 1L)
+
+    summaryTbl <- suppressMessages(get_bbs_table("build_summary"))
+
+    if (!(packagename %in% summaryTbl$package)) {
+        message(sprintf("Package: '%s' Not Found.\n  Please check spelling and capitalization",
+                        packagename))
+        return(NULL)
+    }
+
+    if (!(builder %in% summaryTbl$node)) {
+        message(sprintf("Builder: '%s' Not Found.\n  Please check spelling and capitalization",
+                        builder))
+        return(NULL)
+    }
+
+    pkgTbl <- summaryTbl |>
+        filter(package == packagename,
+               status %in% c("ERROR", "TIMEOUT"),
+               node == builder) |>
+        mutate(version = as.package_version(version)) |>
+        arrange(startedat)   # oldest first for correct gap calculation
+
+    if (nrow(pkgTbl) == 0) {
+        message("No failing builds found for this package and builder.")
+        return(NULL)
+    }
+
+    pkgEpisodes <- pkgTbl |>
+        group_by(version) |>
+        mutate(
+            gap_hours = as.numeric(difftime(startedat, lag(startedat), units = "hours")),
+            gap_days  = as.numeric(difftime(as.Date(startedat), lag(as.Date(startedat)), units = "days")),
+            episode = cumsum(is.na(gap_hours) | (gap_hours > failure_cluster_hours & gap_days > 1))
+        ) |>
+        ungroup()
+
+    episodeSummary <- pkgEpisodes |>
+        group_by(version, episode) |>
+        summarise(
+            first_failure = min(startedat),
+            last_failure  = max(startedat),
+            n_failures    = n(),
+            stages        = paste(sort(unique(stage)), collapse = ", "),
+            statuses      = paste(sort(unique(status)), collapse = ", "),
+            .groups = "drop"
+        ) |>
+        arrange(desc(first_failure))
+
+    
+    return(episodeSummary)
+}
