@@ -1,6 +1,5 @@
 library(arrow)
 library(dplyr)
-library(stringr)
 
 s3_summary_url <- "s3://bioc-builddb-mirror/parquet/build_summary.parquet"
 s3_info_url <- "s3://bioc-builddb-mirror/parquet/info.parquet"
@@ -142,14 +141,62 @@ get_package_build_results <- function(packagename, branch="devel"){
 
 
 
+##
+## Counts number of ERROR but should also list out of how many runs for scope
+##
+package_error_count <- function(packagename, builder=NULL, branch=NULL){
+
+    stopifnot(is.character(packagename), length(packagename)==1L)
+    
+    summaryTbl <- suppressMessages(get_bbs_table("build_summary"))
+    
+    if(!(packagename %in% summaryTbl$package)){
+        message(sprintf("Package: '%s' Not Found.\n  Please check spelling and capitalization",
+                        packagename))
+        return(NULL)
+    }
+
+    pkgTbl <- summaryTbl |>
+        filter(package == packagename, status == "ERROR")
+
+    if (!is.null(builder)){
+        pkgTbl <- pkgTbl |> filter(node %in% builder)
+    }
+    
+    countTbl <-
+        pkgTbl |>
+        count(node, version, stage) |>
+        mutate(
+            version = factor(version, levels = as.character(sort(package_version(unique(version)))))
+        ) |>
+        arrange(version, node)
+
+    infoTbl <- suppressMessages(get_bbs_table("info"))
+    if (!is.null(branch)){
+        branchTbl <- infoTbl |>
+            filter(Package == packagename) |>
+            mutate(Version = package_version(Version)) |>       
+            group_by(Version) |>
+            slice_max(order_by = Version, n = 1, with_ties = FALSE) |>
+            ungroup() |>
+            select(Version, git_branch)
+
+        countTbl <- countTbl |>
+            mutate(version = package_version(as.character(version))) |>
+            left_join(branchTbl, by = c("version" = "Version")) |>
+            arrange(version, node)
+        countTbl <- countTbl |> filter(git_branch %in% branch)
+    }
+    return(countTbl)
+}
+
 
 
 ## summaryTbl <- get_bbs_table("build_summary")
-
-summaryTbl |>
-    filter(package == "BiocFileCache", str_starts(node, "nebbiolo"), status == "ERROR") |>
-    arrange(node, startedat) |>
-    count(node, version, stage)
+## library(stringr)
+## summaryTbl |>
+##     filter(package == "BiocFileCache", str_starts(node, "nebbiolo"), status == "ERROR") |>
+##     count(node, version, stage) |> arrange(node, package_version(version))
 
 
 
