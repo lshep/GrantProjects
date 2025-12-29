@@ -141,12 +141,17 @@ get_package_build_results <- function(packagename, branch="devel"){
 
 
 
-##
-## Counts number of ERROR but should also list out of how many runs for scope
-##
+
+## summaryTbl <- get_bbs_table("build_summary")
+## library(stringr)
+## summaryTbl |>
+##     filter(package == "BiocFileCache", str_starts(node, "nebbiolo"), status == "ERROR") |>
+##     count(node, version, stage) |> arrange(node, package_version(version))
+
+
 package_error_count <- function(packagename, builder=NULL, branch=NULL){
 
-    stopifnot(is.character(packagename), length(packagename)==1L)
+    stopifnot(is.character(packagename), length(packagename) == 1L)
     
     summaryTbl <- suppressMessages(get_bbs_table("build_summary"))
     
@@ -156,51 +161,41 @@ package_error_count <- function(packagename, builder=NULL, branch=NULL){
         return(NULL)
     }
 
-    pkgTbl <- summaryTbl |>
-        filter(package == packagename, status == "ERROR")
-
+    pkgTbl <- summaryTbl |> filter(package == packagename)
+    
     if (!is.null(builder)){
         pkgTbl <- pkgTbl |> filter(node %in% builder)
     }
-    
-    countTbl <-
-        pkgTbl |>
-        count(node, version, stage) |>
+
+    countTbl <- pkgTbl |>
+        group_by(node, version, stage) |>
+        summarise(
+            count_total = n(),
+            count_error = sum(status == "ERROR"),
+            .groups = "drop"
+        ) |>
         mutate(
             version = factor(version, levels = as.character(sort(package_version(unique(version)))))
         ) |>
         arrange(version, node)
 
     infoTbl <- suppressMessages(get_bbs_table("info"))
+    branchTbl <- infoTbl |>
+        filter(Package == packagename) |>
+        mutate(Version = package_version(Version)) |>
+        group_by(Version) |>
+        slice_max(order_by = Version, n = 1, with_ties = FALSE) |>
+        ungroup() |>
+        select(Version, git_branch)
+    
+    countTbl <- countTbl |>
+        mutate(version = package_version(as.character(version))) |>
+        left_join(branchTbl, by = c("version" = "Version")) |>
+        arrange(version, node)
+    
     if (!is.null(branch)){
-        branchTbl <- infoTbl |>
-            filter(Package == packagename) |>
-            mutate(Version = package_version(Version)) |>       
-            group_by(Version) |>
-            slice_max(order_by = Version, n = 1, with_ties = FALSE) |>
-            ungroup() |>
-            select(Version, git_branch)
-
-        countTbl <- countTbl |>
-            mutate(version = package_version(as.character(version))) |>
-            left_join(branchTbl, by = c("version" = "Version")) |>
-            arrange(version, node)
         countTbl <- countTbl |> filter(git_branch %in% branch)
     }
+
     return(countTbl)
 }
-
-
-
-## summaryTbl <- get_bbs_table("build_summary")
-## library(stringr)
-## summaryTbl |>
-##     filter(package == "BiocFileCache", str_starts(node, "nebbiolo"), status == "ERROR") |>
-##     count(node, version, stage) |> arrange(node, package_version(version))
-
-
-
-
-
-
-
