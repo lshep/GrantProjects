@@ -1,0 +1,95 @@
+library(arrow)
+library(dplyr)
+library(stringr)
+
+s3_summary_url <- "s3://bioc-builddb-mirror/parquet/build_summary.parquet"
+s3_info_url <- "s3://bioc-builddb-mirror/parquet/info.parquet"
+s3_propagation_url <- "s3://bioc-builddb-mirror/parquet/propagation_status.parquet"
+
+
+
+
+.bbs_cache <- new.env(parent = emptyenv())
+
+get_bbs_table <- function(tblname=c("build_summary", "info",
+                                    "propagation_status")){
+    tblname <- match.arg(tblname)
+
+    if (exists(tblname, envir = .bbs_cache)) {
+        message(sprintf("Using cached table '%s'", tblname))
+        return(get(tblname, envir = .bbs_cache))
+    }  
+    
+    url <- paste0("s3://bioc-builddb-mirror/parquet/", tblname, ".parquet")
+    message("reading parquet file...")
+    
+    tbl <-
+        tryCatch(
+            arrow::read_parquet(url),
+            error = function(e){
+                warning(
+                    sprintf("Could not read '%s' from remote location (%s)",
+                            tblname, conditionMessage(e)),
+                    call. = FALSE
+                )
+                return(NULL)
+            })
+
+    if (!is.null(tbl)) {
+        assign(tblname, tbl, envir = .bbs_cache)
+    }
+  
+    tbl
+}
+
+
+get_all_bbs_tables <- function(assign_to_global = FALSE) {
+    
+    table_names <- c("build_summary", "info", "propagation_status")
+    tables <- list()
+  
+    for (tblname in table_names) {
+        tbl <- get_bbs_table(tblname)
+        tables[[tblname]] <- tbl
+        
+        if (assign_to_global && !is.null(tbl)) {
+            assign(tblname, tbl, envir = .GlobalEnv)
+            message(sprintf("Table '%s' assigned to global environment", tblname))
+        }
+    }
+    
+    invisible(tables)    
+}
+
+
+
+
+
+
+
+
+## Some initial queries to turn into functions
+
+infoTbl <- get_bbs_table("info")
+
+infoTbl |>
+    group_by(Package, git_branch) |>
+    slice_max(order_by = git_last_commit_date, n = 1, with_ties = FALSE) |>
+    ungroup() |> filter(Package == "BiocFileCache")
+
+
+
+
+summaryTbl <- get_bbs_table("build_summary")
+
+summaryTbl |>
+    filter(package == "BiocFileCache", str_starts(node, "nebbiolo"), status == "ERROR") |>
+    arrange(node, startedat) |>
+    count(node, version, stage)
+
+
+
+
+
+
+
