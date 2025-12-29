@@ -21,7 +21,7 @@ get_bbs_table <- function(tblname=c("build_summary", "info",
     }  
     
     url <- paste0("s3://bioc-builddb-mirror/parquet/", tblname, ".parquet")
-    message("reading parquet file...")
+    message(sprintf("reading '%s' parquet file...", tblname))
     
     tbl <-
         tryCatch(
@@ -65,22 +65,86 @@ get_all_bbs_tables <- function(assign_to_global = FALSE) {
 
 
 
-
-
-
 ## Some initial queries to turn into functions
 
-infoTbl <- get_bbs_table("info")
+get_package_release_info <- function(packagename){
 
-infoTbl |>
-    group_by(Package, git_branch) |>
-    slice_max(order_by = git_last_commit_date, n = 1, with_ties = FALSE) |>
-    ungroup() |> filter(Package == "BiocFileCache")
+    stopifnot(is.character(packagename), length(packagename)==1L)
+    infoTbl <- suppressMessages(get_bbs_table("info"))
+    if(packagename %in% infoTbl$Package){
+        infoTbl |>
+            group_by(Package, git_branch) |>
+            slice_max(order_by = git_last_commit_date, n = 1, with_ties = FALSE) |>
+            ungroup() |> filter(Package == packagename) |>
+            select(Package, Version, git_branch, git_last_commit, git_last_commit_date)
+    }else{
+        message(sprintf("Package: '%s' Not Found.\n  Please check spelling and capitalization",
+                        packagename))
+        NULL
+    }
+}
 
 
 
 
-summaryTbl <- get_bbs_table("build_summary")
+get_package_build_results <- function(packagename, branch="devel"){
+
+    stopifnot(is.character(packagename), length(packagename)==1L)
+    stopifnot(is.character(branch), length(branch)==1L)
+    
+    summaryTbl <- suppressMessages(get_bbs_table("build_summary"))
+    
+    if(!(packagename %in% summaryTbl$package)){
+        message(sprintf("Package: '%s' Not Found.\n  Please check spelling and capitalization",
+                        packagename))
+        return(NULL)
+    }
+    
+    pkgTbl <-
+        summaryTbl |> filter(package == packagename) |>
+        group_by(node, version, stage) |>
+        slice_max(endedat, n = 1, with_ties = FALSE) |>
+        ungroup()  |> 
+        select(package, node, stage, version, status, endedat)
+
+    infoTbl <- suppressMessages(get_bbs_table("info"))
+    
+    if(!(branch %in% infoTbl$git_branch)){
+        message(sprintf("Branch: '%s' Not Found.\n  Please check spelling and capitalization",
+                        branch))
+        return(NULL)
+    }
+        
+    info_latest <-
+        infoTbl |> filter(Package == packagename) |>
+        group_by(Version) |>
+        slice_max(git_last_commit_date, n = 1, with_ties = FALSE) |>
+        ungroup() |> 
+        select(Version, git_branch, git_last_commit, git_last_commit_date)
+    
+    if (branch == "devel"){
+        info_filtered <-
+            info_latest |> filter(git_branch == branch) |>
+            mutate(version_obj = package_version(Version)) |>
+            slice_max(version_obj, n = 1, with_ties = FALSE) |>
+            select(-version_obj)
+    }else{
+        info_filtered <-
+            info_latest |> filter(git_branch == branch)
+    }
+    
+    results <-
+        pkgTbl |>
+        inner_join(info_filtered, by = c("version" = "Version"))
+
+    return(results)
+}
+
+
+
+
+
+## summaryTbl <- get_bbs_table("build_summary")
 
 summaryTbl |>
     filter(package == "BiocFileCache", str_starts(node, "nebbiolo"), status == "ERROR") |>
