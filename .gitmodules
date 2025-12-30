@@ -1,3 +1,6 @@
 [submodule "MaintainerValidation/RubyMaintainerValidationApp"]
 	path = MaintainerValidation/RubyMaintainerValidationApp
 	url = git@github.com:lshep/RubyMaintainerValidationApp.git
+[submodule "BBSReportDatabase/BiocBuildDB"]
+	path = BBSReportDatabase/BiocBuildDB
+	url = git@github.com:lshep/BiocBuildDB.git
