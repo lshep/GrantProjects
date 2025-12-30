@@ -43,7 +43,9 @@ get_bbs_table <- function(tblname=c("build_summary", "info",
 
 
 get_all_bbs_tables <- function(assign_to_global = FALSE) {
-    
+
+    stopifnot(is.logical(assign_to_global), length(assign_to_global)==1L)
+ 
     table_names <- c("build_summary", "info", "propagation_status")
     tables <- list()
   
