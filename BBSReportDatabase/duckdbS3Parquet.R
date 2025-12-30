@@ -74,9 +74,10 @@ get_package_release_info <- function(packagename){
     infoTbl <- suppressMessages(get_bbs_table("info"))
     if(packagename %in% infoTbl$Package){
         infoTbl |>
+            filter(Package == packagename) |>
             group_by(Package, git_branch) |>
             slice_max(order_by = git_last_commit_date, n = 1, with_ties = FALSE) |>
-            ungroup() |> filter(Package == packagename) |>
+            ungroup() |>
             select(Package, Version, git_branch, git_last_commit, git_last_commit_date)
     }else{
         message(sprintf("Package: '%s' Not Found.\n  Please check spelling and capitalization",
