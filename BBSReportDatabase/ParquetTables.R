@@ -75,7 +75,7 @@ get_package_release_info <- function(packagename){
     if(packagename %in% infoTbl$Package){
         infoTbl |>
             filter(Package == packagename) |>
-            group_by(Package, git_branch) |>
+            group_by(git_branch) |>
             slice_max(order_by = git_last_commit_date, n = 1, with_ties = FALSE) |>
             ungroup() |>
             select(Package, Version, git_branch, git_last_commit, git_last_commit_date)
@@ -111,8 +111,8 @@ get_package_build_results <- function(packagename, branch="devel"){
 
     infoTbl <- suppressMessages(get_bbs_table("info"))
     
-    if(!(branch %in% infoTbl$git_branch)){
-        message(sprintf("Branch: '%s' Not Found.\n  Please check spelling and capitalization",
+    if(!(branch %in% infoTbl$git_branch[infoTbl$Package == packagename])){
+        message(sprintf("Branch: '%s' Not Found for Package.\n  Please check spelling and capitalization",
                         branch))
         return(NULL)
     }
@@ -258,4 +258,119 @@ package_failures_over_time <- function(packagename, builder, failure_cluster_hou
 
     
     return(episodeSummary)
+}
+
+
+get_latest_branches <- function(infoTbl) {
+      
+    release_branches <- grep("^RELEASE", infoTbl$git_branch, value = TRUE)
+    if (length(release_branches) > 0) {
+        release_versions <- as.numeric(gsub("RELEASE_(\\d+)_(\\d+)", "\\1\\2", release_branches))
+        latest_release <- release_branches[which.max(release_versions)]
+    } else {
+        latest_release <- character(0)
+    }
+    
+    c("devel", latest_release)
+}
+
+
+## will be mix of type as there is nothing in these that distinguish between
+## software/workflow etc....
+
+get_build_report <- function(build_date = Sys.Date(), branch = NULL, builder = NULL) {
+
+    stopifnot(inherits(build_date, c("Date", "character")))
+  
+    summaryTbl <- suppressMessages(get_bbs_table("build_summary"))
+    infoTbl <- suppressMessages(get_bbs_table("info"))
+    
+    build_date <- as.Date(build_date)
+    
+    dailyTbl <- summaryTbl |> 
+        filter(as.Date(startedat) == build_date)
+    
+    if (nrow(dailyTbl) == 0) {
+        message("No builds found on this date.")
+        return(NULL)
+    }
+  
+    if (is.null(branch)) {
+        branch_filter <- get_latest_branches(infoTbl)
+    } else {
+        branch_filter <- branch
+    }
+  
+    info_filtered <- infoTbl |> 
+        filter(git_branch %in% branch_filter) |> 
+        group_by(Package, git_branch) |> 
+        slice_max(package_version(Version), n = 1, with_ties = FALSE) |> 
+        ungroup() |> 
+        select(Package, Version, git_branch, git_last_commit, git_last_commit_date)
+  
+    daily_report <- dailyTbl |> 
+        inner_join(info_filtered, by = c("package" = "Package", "version" = "Version"))
+  
+    if (!is.null(builder)) {
+        daily_report <- daily_report |> filter(node == builder)
+        if (nrow(daily_report) == 0) {
+            message(sprintf("No builds found for builder '%s' on %s.", builder, build_date))
+            return(NULL)
+        }
+    }
+    stage_levels <- c("install", "buildsrc", "checksrc")
+    
+    daily_report <- daily_report |> 
+        mutate(stage = factor(stage, levels = stage_levels),
+               version = package_version(version)) |> 
+        arrange(git_branch, package, version, node, stage)
+    
+    daily_report
+}
+
+get_failing_packages <- function(branch = NULL, builder = NULL) {
+
+    summaryTbl <- suppressMessages(get_bbs_table("build_summary"))
+    infoTbl <- suppressMessages(get_bbs_table("info"))
+  
+    if (is.null(branch)) {
+        branch_filter <- get_latest_branches(infoTbl)
+    } else {
+        branch_filter <- branch
+    }
+  
+    info_filtered <- infoTbl |> 
+        filter(git_branch %in% branch_filter) |> 
+        group_by(Package, git_branch) |> 
+        slice_max(package_version(Version), n = 1, with_ties = FALSE) |> 
+        ungroup() |> 
+        select(Package, Version, git_branch)
+  
+    failures <- summaryTbl |> 
+        filter(status %in% c("ERROR", "TIMEOUT")) |> 
+        inner_join(info_filtered,
+                   by = c("package" = "Package", "version" = "Version"),
+                   relationship = "many-to-many")
+  
+    if (!is.null(builder)) {
+        failures <- failures |> filter(node %in% builder)
+    }
+  
+    if (nrow(failures) == 0) {
+        message("No failing packages found for the specified branch(es) and node(s).")
+        return(NULL)
+    }
+    
+
+    failures |> 
+        mutate(version = package_version(version)) |>
+        group_by(git_branch, package, version, node) |> 
+        summarise(
+            stages   = paste(sort(unique(stage)), collapse = ", "),
+            statuses = paste(sort(unique(status)), collapse = ", "),
+            .groups  = "drop"
+        ) |> 
+        arrange(git_branch, package, version, node)
+
+
 }
