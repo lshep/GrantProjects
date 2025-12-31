@@ -135,3 +135,24 @@ dbDisconnect(con)
 ## 4         3087443  2025-10-29 14:54:47 0015761b48700798e7a4cc3e0d5a3e00
 ## 5         404c1b6  2025-10-29 14:54:40 0015761b48700798e7a4cc3e0d5a3e00
 ## 6         2df08dd  2025-10-29 14:54:50 0015761b48700798e7a4cc3e0d5a3e00
+
+
+
+
+
+
+## > head(prop)
+##               package process                                   propagate
+## 1          adductData  source UNNEEDED, same version is already published
+## 2        affycompData  source UNNEEDED, same version is already published
+## 3            affydata  source UNNEEDED, same version is already published
+## 4    Affyhgu133A2Expr  source UNNEEDED, same version is already published
+## 5     Affyhgu133aExpr  source UNNEEDED, same version is already published
+## 6 Affyhgu133Plus2Expr  source UNNEEDED, same version is already published
+##                         report_md5
+## 1 0015761b48700798e7a4cc3e0d5a3e00
+## 2 0015761b48700798e7a4cc3e0d5a3e00
+## 3 0015761b48700798e7a4cc3e0d5a3e00
+## 4 0015761b48700798e7a4cc3e0d5a3e00
+## 5 0015761b48700798e7a4cc3e0d5a3e00
+## 6 0015761b48700798e7a4cc3e0d5a3e00
