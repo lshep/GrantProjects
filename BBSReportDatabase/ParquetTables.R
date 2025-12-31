@@ -261,7 +261,11 @@ package_failures_over_time <- function(packagename, builder, failure_cluster_hou
 }
 
 
-get_latest_branches <- function(infoTbl) {
+get_latest_branches <- function(infoTbl=NULL) {
+
+    if(is.null(infoTbl)) infoTbl <- suppressMessages(get_bbs_table("info"))
+
+    stopifnot("git_branch" %in% names(infoTbl))
       
     release_branches <- grep("^RELEASE", infoTbl$git_branch, value = TRUE)
     if (length(release_branches) > 0) {
