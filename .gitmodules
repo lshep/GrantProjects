@@ -4,3 +4,6 @@
 [submodule "BBSReportDatabase/BiocBuildDB"]
 	path = BBSReportDatabase/BiocBuildDB
 	url = git@github.com:lshep/BiocBuildDB.git
+[submodule "BBSReportDatabase/BiocBuildReporter"]
+	path = BBSReportDatabase/BiocBuildReporter
+	url = git@github.com:lshep/BiocBuildReporter.git
