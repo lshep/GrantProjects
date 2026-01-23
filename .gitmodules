@@ -7,3 +7,6 @@
 [submodule "BBSReportDatabase/BiocBuildReporter"]
 	path = BBSReportDatabase/BiocBuildReporter
 	url = git@github.com:lshep/BiocBuildReporter.git
+[submodule "MaintainerValidation/DashboardInterface/BiocMaintainerApp"]
+	path = MaintainerValidation/DashboardInterface/BiocMaintainerApp
+	url = git@github.com:lshep/BiocMaintainerApp.git
