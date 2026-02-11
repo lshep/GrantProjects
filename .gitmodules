@@ -10,3 +10,6 @@
 [submodule "MaintainerValidation/DashboardInterface/BiocMaintainerApp"]
 	path = MaintainerValidation/DashboardInterface/BiocMaintainerApp
 	url = git@github.com:lshep/BiocMaintainerApp.git
+[submodule "BBSReportDatabase/bioc-r-universe-build-db"]
+	path = BBSReportDatabase/bioc-r-universe-build-db
+	url = git@github.com:lshep/bioc-r-universe-build-db.git
