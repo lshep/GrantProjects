@@ -1,0 +1,25 @@
+## Set Github Token
+
+   token needs access to lshep/annotation_pkg_evalutation
+   with
+      Issues: read and write
+      Actions: read
+
+   before running script:
+     export GITHUB_TOKEN="github_pat_XXXXXXXXXXXXXXXX"
+
+
+## Dry Run
+
+  python3 submit_annotation_packages.py --dry-run
+
+
+## Test With A Few Packages
+
+  python3 submit_annotation_packages.py --limit 5
+
+
+## Run Full Submission
+
+  python3 submit_annotation_packages.py
+
