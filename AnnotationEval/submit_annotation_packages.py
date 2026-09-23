@@ -83,7 +83,7 @@ PACKAGE_BASE_URL = (
 
 # GitHub repository receiving the issues.
 GITHUB_OWNER = "lshep"
-GITHUB_REPO = "annotation_pkg_evalutation"
+GITHUB_REPO = "annotation_pkg_evaluation"
 
 # Workflow used to validate each submitted package.
 #
@@ -97,7 +97,7 @@ WORKFLOW_NAME = "Validate Annotation Package"
 STATE_FILE = Path("annotation_submission_state.json")
 
 # How often to check GitHub Actions while waiting for capacity.
-POLL_INTERVAL = 60
+POLL_INTERVAL = 300
 
 # Maximum number of validation workflow runs we intentionally allow to be
 # queued or running.
@@ -123,7 +123,8 @@ MIN_SUBMISSION_INTERVAL = 30
 SUBMISSION_JITTER = 10
 
 # Warn and wait if the authenticated API rate limit falls below this value.
-MIN_REMAINING_API_REQUESTS = 500
+#  5,000 requests/hour for authenticated REST API requests
+MIN_REMAINING_API_REQUESTS = 200
 
 # Number of retries for transient API failures.
 MAX_API_RETRIES = 8
@@ -289,6 +290,24 @@ class GitHubClient:
         raise GitHubAPIError(
             f"GitHub API request failed after {MAX_API_RETRIES} attempts: "
             f"{method} {path}"
+        )
+
+
+def verify_github_auth(client):
+    user = client.request("GET", "/user")
+    login = user.get("login")
+
+    if not login:
+        raise RuntimeError(
+            "GitHub authentication succeeded, but no username was returned."
+        )
+
+    print(f"Authenticated to GitHub as: {login}")
+
+    if login.lower() != GITHUB_OWNER.lower():
+        raise RuntimeError(
+            f"Authenticated GitHub account is '{login}', "
+            f"but expected '{GITHUB_OWNER}'."
         )
 
 
@@ -902,6 +921,7 @@ def main():
         return
 
     client = GitHubClient(token)
+    verify_github_auth(client)
 
     print()
     print("=" * 80)
